@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>إلى رُبى ❤️</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap"
+        rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: 'Cairo', sans-serif;
+      background: linear-gradient(135deg, #fbc2eb, #a6c1ee, #d4b5ff);
+      color: #51234f;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      overflow-x: hidden;
+    }
+
+    /* القلوب المتحركة بالخلفية */
+    #hearts {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .floating-heart {
+      position: absolute;
+      bottom: -50px;
+      animation: floatUp linear forwards;
+      opacity: 0;
+      user-select: none;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) rotate(0deg) scale(0.7);
+        opacity: 0;
+      }
+
+      15% {
+        opacity: 0.75;
+      }
+
+      85% {
+        opacity: 0.65;
+      }
+
+      100% {
+        transform: translateY(-115vh) rotate(35deg) scale(1.2);
+        opacity: 0;
+      }
+    }
+
+    /* البطاقة الأساسية */
+    .card {
+      width: 100%;
+      max-width: 650px;
+      padding: 30px 24px;
+      border-radius: 25px;
+      background: rgba(255, 255, 255, 0.76);
+      box-shadow: 0 10px 35px rgba(100, 40, 100, 0.18);
+      text-align: center;
+      line-height: 2.2;
+      position: relative;
+      z-index: 1;
+      backdrop-filter: blur(5px);
+    }
+
+    h1 {
+      color: #c0448b;
+      margin-bottom: 10px;
+    }
+
+    .heart {
+      font-size: 38px;
+      animation: beat 1.2s infinite;
+    }
+
+    @keyframes beat {
+      0%, 100% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.2);
+      }
+    }
+
+    p {
+      font-size: 17px;
+    }
+
+    button {
+      border: none;
+      border-radius: 30px;
+      padding: 12px 28px;
+      margin-top: 15px;
+      background: #d65a9e;
+      color: white;
+      font-family: inherit;
+      font-size: 16px;
+      cursor: pointer;
+      box-shadow: 0 5px 15px rgba(214, 90, 158, 0.25);
+      transition: transform 0.3s, background 0.3s;
+    }
+
+    button:hover {
+      background: #b83f83;
+      transform: scale(1.04);
+    }
+
+    /* الرسالة تظهر حرفًا بعد حرف */
+    #message {
+      display: none;
+      text-align: right;
+      margin-top: 25px;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      font-size: 17px;
+      line-height: 2.2;
+    }
+
+    #message.show {
+      display: block;
+    }
+
+    #messageText {
+      white-space: pre-wrap;
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 2px;
+      height: 20px;
+      background: #c0448b;
+      margin-right: 3px;
+      vertical-align: middle;
+      animation: blink 0.7s infinite;
+    }
+
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+
+    .signature {
+      text-align: center;
+      color: #c0448b;
+      font-weight: bold;
+      font-size: 21px;
+      margin-top: 20px;
+    }
+
+    @media (max-width: 480px) {
+      .card {
+        padding: 25px 18px;
+      }
+
+      #message {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- طبقة القلوب -->
+  <div id="hearts"></div>
+
+  <main class="card">
+    <div class="heart">❤️</div>
+
+    <h1>إلى رُبى</h1>
+
+    <p>في كلام من قلبي إلك...</p>
+
+    <button id="openButton" onclick="openMessage()">
+      افتحي رسالتي ❤️
+    </button>
+
+    <div id="message">
+      <span id="messageText"></span><span id="cursor" class="cursor"></span>
+    </div>
+
+    <audio id="music" loop>
+      <source src="music.mp3" type="audio/mpeg">
+    </audio>
+  </main>
+
+  <script>
+    /* إنشاء قلوب متحركة بشكل مستمر */
+    const heartsContainer = document.getElementById("hearts");
+    const heartSymbols = ["❤️", "💗", "💕", "💖", "♡"];
+
+    function createHeart() {
+      const heart = document.createElement("span");
+
+      heart.className = "floating-heart";
+      heart.textContent =
+        heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.fontSize = (14 + Math.random() * 24) + "px";
+
+      const duration = 6 + Math.random() * 7;
+      heart.style.animationDuration = duration + "s";
+
+      heartsContainer.appendChild(heart);
+
+      setTimeout(() => {
+        heart.remove();
+      }, duration * 1000);
+    }
+
+    /* قلوب بالخلفية حتى قبل فتح الرسالة */
+    for (let i = 0; i < 18; i++) {
+      setTimeout(createHeart, i * 250);
+    }
+
+    setInterval(createHeart, 450);
+
+    /* نص الرسالة */
+    const letter = `رُبى ❤️
+
+أنا بعتذر كتير إنّي ضايقتك، بس إنتِ بتعرفي قديش إلك معزّة بقلبي، وقديش بحبك.
+
+إنتِ عندي غالية كتير، وبدي ياكي تعرفي إنّي ما بدي غيرك، وبدي دايمًا كون حدّك وسندك وضهرك.
+
+بوعدك طول ما أنا عايش رح ضل معك، ودايمًا كون الشخص اللي بتستاهليه، واللي بيحافظ على قلبك وما بيكون سبب بزعلك.
+
+يمكن أوقات بغلط أو ما بعرف عبّر عن كل اللي بقلبي، بس هالشي ما بيغيّر أبدًا من محبتي إلك.
+
+بحبك كتير يا رُبى، وبدي ضل شوف ضحكتك كون سبب بفرحتك، مش بزعلك.
+
+انتِ احلى شي بالدنيا والحياة بلاكي ما بتنعاش
+
+وانا يا قلبي ما رح ابعد عنك لو شو ما صار..
+
+إنتِ غالية على قلبي أكتر ما بتتخيّلي ❤️`;
+
+    let opened = false;
+
+    function openMessage() {
+      if (opened) return;
+      opened = true;
+
+      const message = document.getElementById("message");
+      const messageText = document.getElementById("messageText");
+      const cursor = document.getElementById("cursor");
+      const button = document.getElementById("openButton");
+
+      message.classList.add("show");
+      button.style.display = "none";
+
+      /* محاولة تشغيل الموسيقى بعد ضغط المستخدم */
+      const music = document.getElementById("music");
+      music.volume = 0.5;
+      music.play().catch(() => {
+        /* قد تحتاج الموسيقى إلى ملف صحيح أو تشغيل يدوي */
+      });
+
+      /* كتابة الرسالة تدريجيًا */
+      let index = 0;
+
+      function typeLetter() {
+        if (index < letter.length) {
+          messageText.textContent += letter.charAt(index);
+          index++;
+
+          /* سرعة الكتابة */
+          const delay = letter.charAt(index - 1) === "\n" ? 180 : 42;
+
+          window.scrollTo({
+            top: document.body.scrollHeight,
+            behavior: "smooth"
+          });
+
+          setTimeout(typeLetter, delay);
+        } else {
+          cursor.style.display = "none";
+
+          const signature = document.createElement("div");
+          signature.className = "signature";
+          signature.textContent = "بحبك يا رُبى ❤️";
+          message.appendChild(signature);
+        }
+      }
+
+      typeLetter();
+    }
+  </script>
+
+</body>
+</html>
